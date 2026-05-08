@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/respelling"
+require "optparse"
+
+options = { lang: "es" }
+OptionParser.new do |opts|
+  opts.banner = "Usage: respell --lang LANG IPA_STRING"
+  opts.on("-l", "--lang LANG", "Source language (default: es)") { |v| options[:lang] = v }
+  opts.on("-v", "--version", "Print version and exit") do
+    puts Respelling::VERSION
+    exit 0
+  end
+end.parse!
+
+ipa = ARGV.join(" ")
+abort "respell: no IPA input provided" if ipa.empty?
+
+converter = Respelling.for(options[:lang])
+puts converter.respell(ipa)
+converter.warnings.each { |w| warn "respell: #{w}" }
