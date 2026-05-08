@@ -92,15 +92,29 @@ This gem is the **canonical** implementation. A Python port lives in [`parrot-la
 
 A future parity test will run both implementations against the same fixtures and assert identical output. Until then, treat divergence as a bug to be reported against this repo.
 
-## Two layers (v0.3)
+## Three layers (v0.3)
 
-**Hand-curated corpus** (`lib/respelling/data/spanish-en-corpus.json`) — 50 phrases respelled with the novel English-word-shape style. This is the v1 craft layer that the parrot-lab demo serves.
+**1. Hand-curated corpus** (`lib/respelling/data/spanish-en-corpus.json`) — 50 phrases respelled with the novel English-word-shape style. The v1 craft layer that the parrot-lab demo serves.
 
-**Algorithmic IPA fallback** (`lib/respelling/data/spanish-en.json`) — IPA→respelling table for arbitrary inputs not in the corpus. Currently emits the dictionary style (`BWAY-nohs DEE-ahs`); v0.4 will retrain it to emit corpus style by default.
+**2. LLM-respelling for ANY phrase** — `Respelling.via_llm(phrase:, source:, target:)` — calls Gemma3-27b on OpenRouter with a few-shot prompt anchored on the corpus style. Works on phrases that aren't in the corpus.
 
-## IPA → table caveats
+```ruby
+require "respelling"
 
-The IPA table currently reflects the dictionary style; the corpus has the novel style. The two layers will be reconciled in v0.4.
+Respelling.via_llm(phrase: "Estoy bien")
+# => "estoy byen"
+
+Respelling.via_llm(phrase: "Me llamo Carlos")
+# => "may yaamo carlos"
+
+# Pass api_key explicitly if not in env:
+Respelling.via_llm(phrase: "Tengo hambre", api_key: "...")
+# Defaults: source: :es, target: :en, model: "google/gemma-3-27b-it"
+```
+
+Requires `OPENROUTER_API_KEY` in `ENV`. Uses `google/gemma-3-27b-it` by default — small, fast, follows the few-shot orthography rules well. Cost is fractions of a cent per phrase.
+
+**3. Algorithmic IPA fallback** (`lib/respelling/data/spanish-en.json`) — static IPA→respelling table. Currently emits the dictionary style — kept as a deterministic fallback when LLM is unavailable.
 
 ## Attribution
 
