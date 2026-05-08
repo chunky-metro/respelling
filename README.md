@@ -116,6 +116,15 @@ Requires `OPENROUTER_API_KEY` in `ENV`. Uses `google/gemma-4-26b-a4b-it` by defa
 
 **3. Algorithmic IPA fallback** (`lib/respelling/data/spanish-en.json`) — static IPA→respelling table. Currently emits the dictionary style — kept as a deterministic fallback when LLM is unavailable.
 
+## Four guiding principles (v0.3.2)
+
+1. **Drop silent letters from the source.** Spanish silent H is the canonical case — "Hasta" → `asta`. An English reader who sees "Hasta" pronounces the H; dropping it removes the misvoicing.
+2. **Use natural English orthography combinations** — never transliteration markers (no schwa, no IPA, no diacritics).
+3. **For sound clusters with no single English-word analog, fuse fragments of multiple English words.** Spanish "luego" has the cluster "lwe" with no clean English-word match — `lawaygo` fuses `law` + `way` + `go`, three English-word fragments an English reader naturally reads in sequence.
+4. **Real-English-word base.** When a foreign word sounds and spells close to a real English word, base the respelling on that English word with a minor twist. Spanish "Gracias" → `grassious` (real English `gracious` + extra `s`, reads "GRASS-yus" ≈ Spanish "GRAH-syahs").
+
+So "Hasta luego" → `asta lawaygo`, not `asta lwaygo` (lwa is not English) and not `ahsta lwehgo` (transliteration markers). And "Gracias" → `grassious`, not `grasseeus` (the `ee-us` tail is awkward).
+
 ## Attribution
 
 Derived from the [parrot-lab](https://github.com/chunky-metro/parrot-lab) project. Data tables and code are MIT-licensed (see `LICENSE`).

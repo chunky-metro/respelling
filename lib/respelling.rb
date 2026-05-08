@@ -68,15 +68,21 @@ module Respelling
       ["Hola",        "ohla"],
       ["mañana",      "manyana"],
       ["buenos días", "bwaynose deeyus"],
-      ["gracias",     "grasseeus"],
+      ["gracias",     "grassious"],
       ["por favor",   "porfavore"],
       ["adiós",       "ahdyose"],
-      ["hasta luego", "asta lwaygo"],
+      ["hasta luego", "asta lawaygo"],
       ["mucho gusto", "moocho goosto"]
     ].map { |a, b| "- \"#{a}\" → \"#{b}\"" }.join("\n")
 
     prompt = <<~PROMPT
       Respell the #{source_name} phrase using #{target_name} orthography conventions so a native #{target_name} reader, reading naturally with no special instructions, produces an approximation of the source-language pronunciation.
+
+      Principles:
+      1. Drop silent letters from the source (e.g. Spanish silent H — "Hasta" → "asta") so the target reader doesn't misvoice them.
+      2. Use natural #{target_name} orthography combinations — not transliteration markers.
+      3. For sound clusters with no single #{target_name}-word analog, fuse fragments of multiple #{target_name} words. Example: Spanish "lwe" has no English equivalent, so "luego" → "lawaygo" fuses "law" + "way" + "go".
+      4. When a real #{target_name} word sounds and spells close to the source word, base the respelling on that real word with a minor twist. Example: Spanish "Gracias" → "grassious" (real English "gracious" + extra s, reads "GRASS-yus" ≈ "GRAH-syahs").
 
       NO hyphens. NO capitalized syllables. NO transliteration markers. Output should look like a plausible #{target_name} word.
 
