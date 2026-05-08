@@ -46,10 +46,10 @@ module Respelling
   #   Respelling.via_llm(phrase: "Estoy bien", source: :es, target: :en)
   #   # => "estoy beeayn"
   #
-  # Requires OPENROUTER_API_KEY (env or api_key:). Uses google/gemma-3-27b-it
+  # Requires OPENROUTER_API_KEY (env or api_key:). Uses google/gemma-4-26b-a4b-it
   # by default — small, fast, follows the few-shot orthography rules well.
   def self.via_llm(phrase:, source: :es, target: :en,
-                   model: "google/gemma-3-27b-it",
+                   model: "google/gemma-4-26b-a4b-it",
                    api_key: ENV["OPENROUTER_API_KEY"],
                    endpoint: "https://openrouter.ai/api/v1/chat/completions",
                    temperature: 0.2)

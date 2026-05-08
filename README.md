@@ -109,10 +109,10 @@ Respelling.via_llm(phrase: "Me llamo Carlos")
 
 # Pass api_key explicitly if not in env:
 Respelling.via_llm(phrase: "Tengo hambre", api_key: "...")
-# Defaults: source: :es, target: :en, model: "google/gemma-3-27b-it"
+# Defaults: source: :es, target: :en, model: "google/gemma-4-26b-a4b-it"
 ```
 
-Requires `OPENROUTER_API_KEY` in `ENV`. Uses `google/gemma-3-27b-it` by default — small, fast, follows the few-shot orthography rules well. Cost is fractions of a cent per phrase.
+Requires `OPENROUTER_API_KEY` in `ENV`. Uses `google/gemma-4-26b-a4b-it` by default — small, fast, follows the few-shot orthography rules well. Cost is fractions of a cent per phrase.
 
 **3. Algorithmic IPA fallback** (`lib/respelling/data/spanish-en.json`) — static IPA→respelling table. Currently emits the dictionary style — kept as a deterministic fallback when LLM is unavailable.
 
