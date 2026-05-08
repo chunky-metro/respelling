@@ -1,14 +1,20 @@
 # respelling
 
-> Hear what you actually sounded like.
+> Phonetic respelling that spells foreign words like English words.
 
-`respelling` maps IPA phonemes to American-English-orthography hints so an English speaker can read the result aloud and approximate the source language. Latin American Spanish ships in v1; the lookup engine is language-agnostic.
+`respelling` writes Spanish phrases the way an English reader would naturally pronounce them — no hyphens marking syllable boundaries, no uppercase marking stress. The respelling looks like an English word; the reader pronounces it; what comes out approximates the Spanish.
 
-```
-ˈbwe.nos ˈði.as  →  BWEH-nohs THEE-ahs
-```
+## What's novel (v0.3)
 
-Stressed syllables are uppercased; syllable boundaries become `-`.
+The dictionary-style transliteration `mah-NYAH-nah` has existed forever — every Merriam-Webster entry has one. **That's not what this is.** This library writes `manyana`. English orthography does the work.
+
+| Spanish     | Dictionary style       | This library (v0.3) |
+| :---------- | :--------------------- | :------------------ |
+| Buenos días | `BWAY-nohs DEE-ahs`    | `bwaynose deeyus`   |
+| Mañana      | `mah-NYAH-nah`         | `manyana`           |
+| Gracias     | `GRAH-syahs`           | `grasseeus`         |
+| Por favor   | `por fah-VOHR`         | `porfavore`         |
+| Hola        | `OH-lah`               | `ohla`              |
 
 ## Install
 
@@ -86,14 +92,15 @@ This gem is the **canonical** implementation. A Python port lives in [`parrot-la
 
 A future parity test will run both implementations against the same fixtures and assert identical output. Until then, treat divergence as a bug to be reported against this repo.
 
+## Two layers (v0.3)
+
+**Hand-curated corpus** (`lib/respelling/data/spanish-en-corpus.json`) — 50 phrases respelled with the novel English-word-shape style. This is the v1 craft layer that the parrot-lab demo serves.
+
+**Algorithmic IPA fallback** (`lib/respelling/data/spanish-en.json`) — IPA→respelling table for arbitrary inputs not in the corpus. Currently emits the dictionary style (`BWAY-nohs DEE-ahs`); v0.4 will retrain it to emit corpus style by default.
+
 ## IPA → table caveats
 
-The table reflects how the table maps IPA, not how a dictionary might idealize the result. Two examples:
-
-- `bwe` → `bweh` (not `bway`). The vowel `/e/` in Spanish is closer to "bed" than "bay"; the table preserves that distinction.
-- `ð` → `th`. Spanish intervocalic `/d/` becomes the voiced dental fricative `[ð]`, and English speakers approximate it as `th` (as in "this") more cleanly than `d`.
-
-If your use case wants the dictionary-style hint instead, ship a sibling table or filter the output post-respell.
+The IPA table currently reflects the dictionary style; the corpus has the novel style. The two layers will be reconciled in v0.4.
 
 ## Attribution
 
